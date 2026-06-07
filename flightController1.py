@@ -110,13 +110,13 @@ def main():
                 
             elif key == 'a':
                 print("-> Command: A (M1 CW, M2 CCW)")
-                motors[0].setSpeed(0.2)  # Motor 1 Clockwise
-                motors[1].setSpeed(-0.2) # Motor 2 Counter-Clockwise
+                motors[0].setSpeed(0.5)  # Motor 1 Clockwise
+                motors[1].setSpeed(0.5) # Motor 2 Counter-Clockwise
                 
             elif key == 'd':
                 print("-> Command: D (M1 CCW, M2 CW)")
-                motors[0].setSpeed(-0.2) # Motor 1 Counter-Clockwise
-                motors[1].setSpeed(0.2)  # Motor 2 Clockwise
+                motors[0].setSpeed(-0.5) # Motor 1 Counter-Clockwise
+                motors[1].setSpeed(-0.5)  # Motor 2 Clockwise
                 
             elif key == 'q':
                 print("\nExiting flight controller...")
