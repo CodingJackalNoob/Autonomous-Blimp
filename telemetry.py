@@ -49,4 +49,17 @@ while True:
             roll_deg = float(parts[1])
             yaw_deg = float(parts[2])
             
-            dashboard.text = f"<span style='color
+            # FIXED: Closed the incomplete f-string literal and dashboard layout safely
+            dashboard.text = f"<span style='color:lime;'>Status: LIVE CONNECTION</span><br><br><b>Pitch:</b> {pitch_deg:>6.1f}° <br><b>Roll:</b>  {roll_deg:>6.1f}° <br><b>Yaw:</b>   {yaw_deg:>6.1f}°"
+            
+            pitch_rad = vp.radians(pitch_deg)
+            roll_rad = vp.radians(roll_deg)
+            yaw_rad = vp.radians(yaw_deg)
+            
+            blimp.axis = vp.vector(vp.cos(pitch_rad)*vp.cos(yaw_rad), vp.sin(pitch_rad), vp.cos(pitch_rad)*vp.sin(yaw_rad))
+            blimp.up = vp.vector(-vp.sin(roll_rad), vp.cos(roll_rad), 0)
+
+    except BlockingIOError:
+        pass
+    except Exception as e:
+        pass
