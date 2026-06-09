@@ -1,0 +1,1 @@
+ssh x11@x11.local "rpicam-vid -t 0 --inline --width 640 --height 480 --framerate 30 --codec h264 -n -o -" | ffplay -f h264 -fflags nobuffer -flags low_delay -framedrop -probesize 32 -analyzeduration 0 -i -
