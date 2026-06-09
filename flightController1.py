@@ -67,11 +67,12 @@ class Motor:
         self._pwm.stop()
 
 # Wire mapping from your PCB configurations
+# FIXED: Changed Motor 2 Enable from 21 to 12 to eliminate the physical clash with Motor 1
 MOTORS_PINS = [
-    MotorPins(input1=21, input2=13, enable=13), # Motor 1 (Left 1)
-    MotorPins(input1=20, input2=6,  enable=21), # Motor 2 (Left 2)
-    MotorPins(input1=16, input2=5,  enable=22), # Motor 3 (Right 1)
-    MotorPins(input1=19, input2=26, enable=25), # Motor 4 (Right 2)
+    MotorPins(input1=21, input2=13, enable=13), # Motor 1 (Left 1) - Kept original
+    MotorPins(input1=20, input2=6,  enable=12), # Motor 2 (Left 2) - Fixed conflicting enable pin
+    MotorPins(input1=16, input2=5,  enable=22), # Motor 3 (Right 1) - Kept original
+    MotorPins(input1=19, input2=26, enable=25), # Motor 4 (Right 2) - Kept original
 ]
 
 # --- 3. MAIN CONTROLLER LOOP ---
@@ -103,20 +104,15 @@ def main():
                 motors[2].stop() # index 2 is Motor 3
                 motors[3].stop() # index 3 is Motor 4
                 
-            elif key == 's':
-                print("-> Command: S (Motors 3 & 4 ON)")
-                motors[2].setSpeed(0.2) # Turn on Motor 3 Forward
-                motors[3].setSpeed(0.2) # Turn on Motor 4 Forward
-                
             elif key == 'a':
                 print("-> Command: A (M1 CW, M2 CCW)")
                 motors[0].setSpeed(0.5)  # Motor 1 Clockwise
-                motors[1].setSpeed(0.5) # Motor 2 Counter-Clockwise
+                motors[1].setSpeed(0.5)  # Motor 2 Clockwise
                 
             elif key == 'd':
                 print("-> Command: D (M1 CCW, M2 CW)")
                 motors[0].setSpeed(-0.5) # Motor 1 Counter-Clockwise
-                motors[1].setSpeed(-0.5)  # Motor 2 Clockwise
+                motors[1].setSpeed(-0.5) # Motor 2 Counter-Clockwise
                 
             elif key == 'q':
                 print("\nExiting flight controller...")
