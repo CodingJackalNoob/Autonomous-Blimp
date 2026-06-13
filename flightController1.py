@@ -1,5 +1,5 @@
 """ Flight Controller Script for Raspberry Pi.
-Maps WASD keys to control 4 motors in real-time via the terminal.
+Maps keyboard keys to control 4 motors in real-time via the terminal.
 Press 'Q' to quit and safely stop all motors.
 """
 
@@ -67,12 +67,11 @@ class Motor:
         self._pwm.stop()
 
 # Wire mapping from your PCB configurations
-# FIXED: Changed Motor 2 Enable from 21 to 12 to eliminate the physical clash with Motor 1
 MOTORS_PINS = [
-    MotorPins(input1=21, input2=13, enable=13), # Motor 1 (Left 1) - Kept original
-    MotorPins(input1=20, input2=6,  enable=12), # Motor 2 (Left 2) - Fixed conflicting enable pin
-    MotorPins(input1=16, input2=5,  enable=22), # Motor 3 (Right 1) - Kept original
-    MotorPins(input1=19, input2=26, enable=25), # Motor 4 (Right 2) - Kept original
+    MotorPins(input1=21, input2=13, enable=13), # Motor 1 (Left 1)
+    MotorPins(input1=20, input2=6,  enable=12), # Motor 2 (Left 2)
+    MotorPins(input1=16, input2=5,  enable=22), # Motor 3 (Right 1)
+    MotorPins(input1=19, input2=26, enable=25), # Motor 4 (Right 2)
 ]
 
 # --- 3. MAIN CONTROLLER LOOP ---
@@ -88,10 +87,15 @@ def main():
     print("\n==========================================")
     print("  FLIGHT CONTROLLER ACTIVE")
     print("  Controls:")
-    print("    W -> Turn OFF Motors 3 & 4")
-    print("    S -> Turn ON Motors 3 & 4")
+    print("    W -> Motors 1 & 2 Spin CW (0.3 Speed)")
+    print("    S -> Motors 1 & 2 Spin CCW (-0.3 Speed)")
     print("    A -> Motor 1 CW, Motor 2 CCW")
     print("    D -> Motor 1 CCW, Motor 2 CW")
+    print("    E -> Motors 1 & 2 STOP")
+    print("------------------------------------------")
+    print("    U -> Motors 3 & 4 Spin CW (0.5 Speed)")
+    print("    I -> Motors 3 & 4 STOP")
+    print("------------------------------------------")
     print("    Q -> EMERGENCY STOP & QUIT")
     print("==========================================")
 
@@ -100,19 +104,39 @@ def main():
             key = get_key()
             
             if key == 'w':
-                print("-> Command: W (Motors 3 & 4 OFF)")
-                motors[2].stop() # index 2 is Motor 3
-                motors[3].stop() # index 3 is Motor 4
+                print("-> Command: W (M1 & M2 CW)")
+                motors[0].setSpeed(0.3)
+                motors[1].setSpeed(0.3)
+                
+            elif key == 's':
+                print("-> Command: S (M1 & M2 CCW)")
+                motors[0].setSpeed(-0.3)
+                motors[1].setSpeed(-0.3)
                 
             elif key == 'a':
                 print("-> Command: A (M1 CW, M2 CCW)")
-                motors[0].setSpeed(0.5)  # Motor 1 Clockwise
-                motors[1].setSpeed(0.5)  # Motor 2 Clockwise
+                motors[0].setSpeed(0.5)   # M1 Clockwise
+                motors[1].setSpeed(-0.5)  # M2 Counter-Clockwise
                 
             elif key == 'd':
                 print("-> Command: D (M1 CCW, M2 CW)")
-                motors[0].setSpeed(-0.5) # Motor 1 Counter-Clockwise
-                motors[1].setSpeed(-0.5) # Motor 2 Counter-Clockwise
+                motors[0].setSpeed(-0.5)  # M1 Counter-Clockwise
+                motors[1].setSpeed(0.5)   # M2 Clockwise
+                
+            elif key == 'e':
+                print("-> Command: E (M1 & M2 STOP)")
+                motors[0].stop()
+                motors[1].stop()
+
+            elif key == 'u':
+                print("-> Command: U (M3 & M4 CW)")
+                motors[2].setSpeed(0.5)
+                motors[3].setSpeed(0.5)
+
+            elif key == 'i':
+                print("-> Command: I (M3 & M4 STOP)")
+                motors[2].stop()
+                motors[3].stop()
                 
             elif key == 'q':
                 print("\nExiting flight controller...")
